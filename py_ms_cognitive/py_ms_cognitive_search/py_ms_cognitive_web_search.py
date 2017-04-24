@@ -1,3 +1,4 @@
+import urlparse
 import requests, requests.utils
 from .py_ms_cognitive_search import PyMsCognitiveSearch
 from .py_ms_cognitive_search import QueryChecker
@@ -65,3 +66,7 @@ class WebResult(object):
         self.description = result.get('snippet')
 
         self.deep_links = result.get('deepLinks')
+
+    @property
+    def clean_url(self):
+        return urlparse.parse_qs(self.url)['r'][0]
