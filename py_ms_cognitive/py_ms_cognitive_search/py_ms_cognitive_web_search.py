@@ -69,4 +69,5 @@ class WebResult(object):
 
     @property
     def clean_url(self):
+        # extract actual URL from dirty URLs like https://www.bing.com/cr?IG=BLAA&CID=BLAA&r=https%3a%2f%2fLINK
         return urlparse.parse_qs(self.url)['r'][0]
