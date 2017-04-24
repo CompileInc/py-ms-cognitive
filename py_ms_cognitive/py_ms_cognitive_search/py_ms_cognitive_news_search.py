@@ -1,6 +1,7 @@
 import requests, requests.utils
 from .py_ms_cognitive_search import PyMsCognitiveSearch
 from .py_ms_cognitive_search import QueryChecker
+from .py_ms_cognitive_search import Result
 
 ##
 ##
@@ -40,7 +41,7 @@ class PyMsCognitiveNewsSearch(PyMsCognitiveSearch):
         self.current_offset += min(50, limit, len(packaged_results))
         return packaged_results
 
-class NewsResult(object):
+class NewsResult(Result):
     '''
     The class represents a SINGLE news result.
     Each result will come with the following:

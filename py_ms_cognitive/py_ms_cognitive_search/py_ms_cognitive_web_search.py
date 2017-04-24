@@ -1,7 +1,7 @@
-import urlparse
 import requests, requests.utils
 from .py_ms_cognitive_search import PyMsCognitiveSearch
 from .py_ms_cognitive_search import QueryChecker
+from .py_ms_cognitive_search import Result
 
 ##
 ##
@@ -39,7 +39,7 @@ class PyMsCognitiveWebSearch(PyMsCognitiveSearch):
         self.current_offset += min(50, limit, len(packaged_results))
         return packaged_results
 
-class WebResult(object):
+class WebResult(Result):
     '''
     The class represents a SINGLE search result.
     Each result will come with the following:
@@ -66,8 +66,3 @@ class WebResult(object):
         self.description = result.get('snippet')
 
         self.deep_links = result.get('deepLinks')
-
-    @property
-    def clean_url(self):
-        # extract actual URL from dirty URLs like https://www.bing.com/cr?IG=BLAA&CID=BLAA&r=https%3a%2f%2fLINK
-        return urlparse.parse_qs(self.url)['r'][0]

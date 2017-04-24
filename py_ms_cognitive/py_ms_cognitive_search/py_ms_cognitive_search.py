@@ -7,6 +7,7 @@ Main class for doing actual searches.
 
 import time
 import re
+import urlparse
 
 
 __author__ = 'tristantao (https://github.com/tristantao)'
@@ -145,3 +146,14 @@ class QueryChecker():
             if query_dict['textFormat'] not in ('Raw', 'HTML'):
                 raise ValueError('textFormat must be == Raw or HTML. Assume Case-Sensitive.')
         return True
+
+
+class Result(object):
+
+    @property
+    def clean_url(self):
+        # extract actual URL from dirty URLs like https://www.bing.com/cr?IG=BLAA&CID=BLAA&r=https%3a%2f%2fLINK
+        try:
+            return urlparse.parse_qs(self.url)['r'][0]
+        except KeyError:
+            return self.url
