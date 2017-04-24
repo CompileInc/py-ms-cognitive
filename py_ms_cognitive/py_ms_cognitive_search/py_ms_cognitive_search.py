@@ -20,6 +20,13 @@ class PyMsCognitiveWebSearchException(Exception):
     pass
 
 
+class MetaData(object):
+
+    def __init__(self, _type, request_url):
+        self.type = _type
+        self.uri = request_url
+
+
 class PyMsCognitiveSearch(object):
     """
     Shell class for the individual searches
@@ -34,6 +41,8 @@ class PyMsCognitiveSearch(object):
         self.MAX_SEARCH_PER_QUERY = 50
         self.MAX_SUGGESTIONS_PER_QUERY = 8
         self.most_recent_json = None
+        self.response = None
+        self.meta = None
 
     def get_json_results(self, response):
         '''
@@ -64,6 +73,8 @@ class PyMsCognitiveSearch(object):
             else:
                 print ("[ERROR] Request returned with code %s, error msg: %s. \nContinuing in 5 seconds." % (r.status_code, r.text))
                 time.sleep(5)
+        self.response = json_results
+        self._set_meta(response.url)
         return json_results
 
     def search(self, limit=50, format='json'):
@@ -87,6 +98,9 @@ class PyMsCognitiveSearch(object):
             time.sleep(1)
         results = results[0:quota]
         return results
+
+    def _set_meta(self, request_url):
+        self.meta = MetaData(self.response.get("_type"), request_url)
 
 
 class QueryChecker():
