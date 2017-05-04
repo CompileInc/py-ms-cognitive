@@ -82,16 +82,21 @@ class PyMsCognitiveSearch(object):
         ''' Returns the result list, and also the uri for next page (returned_list, next_uri) '''
         return self._search(limit, format)
 
-    def search_all(self, quota=50, format='json'):
+    def search_all(self, quota=50, format='json', hard_limit_pages=None):
         '''
         Returns a single list containing up to 'limit' Result objects
         Will keep requesting until quota is met
         Will also truncate extra results to return exactly the given quota
+        Set hard_limit_pages to the maximum number of pages you want to fetch (default off)
         '''
         quota_left = quota
         results = []
+        page_num = 0
         while quota_left > 0:
             more_results = self._search(quota_left, format)
+            page_num += 1
+            if hard_limit_pages and page_num >= hard_limit_pages:
+                break
             if not more_results:
                 break
             results += more_results
